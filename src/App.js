@@ -3,6 +3,11 @@ import "./App.css";
 
 import React, { useState, useMemo } from "react";
 
+// ENV Process
+// const publicURL = process.env.PUBLIC_URL;
+
+console.log(process.env);
+
 const RentalBill = () => {
   // State variables
   const [waterBillBefore, setWaterBillBefore] = useState(0);
@@ -11,21 +16,33 @@ const RentalBill = () => {
   const [electricBillNow, setElectricBillNow] = useState(0);
   const [roomBill, setRoomBill] = useState(0);
   const [discount, setDiscount] = useState(0);
+  const [remark, setRemark] = useState("");
 
   // Computed values using useMemo for optimization
-  const waterUnitUse = useMemo(() => Math.max(waterBillNow - waterBillBefore, 0), [waterBillNow, waterBillBefore]);
+  const waterUnitUse = useMemo(
+    () => Math.max(waterBillNow - waterBillBefore, 0),
+    [waterBillNow, waterBillBefore]
+  );
   const totalWaterBill = useMemo(() => waterUnitUse * 28, [waterUnitUse]);
 
-  const electricUnitUse = useMemo(() => Math.max(electricBillNow - electricBillBefore, 0), [electricBillNow, electricBillBefore]);
-  const totalElectricBill = useMemo(() => electricUnitUse * 8, [electricUnitUse]);
+  const electricUnitUse = useMemo(
+    () => Math.max(electricBillNow - electricBillBefore, 0),
+    [electricBillNow, electricBillBefore]
+  );
+  const totalElectricBill = useMemo(
+    () => electricUnitUse * 8,
+    [electricUnitUse]
+  );
 
-  const totalPriceOnTable = useMemo(() => totalWaterBill + totalElectricBill + roomBill, [
-    totalWaterBill,
-    totalElectricBill,
-    roomBill,
-  ]);
+  const totalPriceOnTable = useMemo(
+    () => totalWaterBill + totalElectricBill + roomBill,
+    [totalWaterBill, totalElectricBill, roomBill]
+  );
 
-  const totalPrice = useMemo(() => Math.max(totalPriceOnTable - discount, 0), [totalPriceOnTable, discount]);
+  const totalPrice = useMemo(
+    () => Math.max(totalPriceOnTable - discount, 0),
+    [totalPriceOnTable, discount]
+  );
 
   // Date formatting
   const formattedDate = new Date().toLocaleDateString("th-TH", {
@@ -47,14 +64,18 @@ const RentalBill = () => {
           <h1 className="text-info fs-2">บิลชำระค่าเช่าบ้าน</h1>
           <h5>
             <div className="text-muted fs-5">ที่อยู่: 19/8 หมู่ 3</div>
-            <div className="text-muted fs-5">ตำบล ระแหง อำเภอ ลาดหลุมแก้ว จังหวัด ปทุมธานี 12140</div>
+            <div className="text-muted fs-5">
+              ตำบล ระแหง อำเภอ ลาดหลุมแก้ว จังหวัด ปทุมธานี 12140
+            </div>
           </h5>
           <h5 className="fs-5">
             <span>วันที่</span> <span>{formattedDate}</span>
           </h5>
         </div>
         <div className="col-sm-5 col-xs-12 align-content-center">
-          <h3 className="fw-bold fs-3">ที่ต้องชำระ <u>{totalPrice}</u> บาท</h3>
+          <h3 className="fw-bold fs-3">
+            ที่ต้องชำระ <u>{totalPrice}</u> บาท
+          </h3>
         </div>
       </div>
 
@@ -77,7 +98,7 @@ const RentalBill = () => {
               <td className="text-end">
                 <input
                   type="number"
-                  className="input-value-form" 
+                  className="input-value-form"
                   value={waterBillBefore}
                   onChange={(e) => setWaterBillBefore(Number(e.target.value))}
                 />
@@ -85,14 +106,20 @@ const RentalBill = () => {
               <td className="text-end">
                 <input
                   type="number"
-                  className="input-value-form" 
+                  className="input-value-form"
                   value={waterBillNow}
                   onChange={(e) => setWaterBillNow(Number(e.target.value))}
                 />
               </td>
-              <td className="text-end">{waterUnitUse}</td>
-              <td className="text-end">28</td>
-              <td className="text-end">{totalWaterBill}</td>
+              <td className="text-end">
+                <div className="px-3">{waterUnitUse}</div>
+              </td>
+              <td className="text-end">
+                <div className="px-3">28</div>
+              </td>
+              <td className="text-end">
+                <div className="px-3">{totalWaterBill}</div>
+              </td>
             </tr>
             <tr>
               <td>ค่าไฟ</td>
@@ -101,7 +128,9 @@ const RentalBill = () => {
                   type="number"
                   className="input-value-form"
                   value={electricBillBefore}
-                  onChange={(e) => setElectricBillBefore(Number(e.target.value))}
+                  onChange={(e) =>
+                    setElectricBillBefore(Number(e.target.value))
+                  }
                 />
               </td>
               <td className="text-end">
@@ -112,9 +141,15 @@ const RentalBill = () => {
                   onChange={(e) => setElectricBillNow(Number(e.target.value))}
                 />
               </td>
-              <td className="text-end">{electricUnitUse}</td>
-              <td className="text-end">8</td>
-              <td className="text-end">{totalElectricBill}</td>
+              <td className="text-end">
+                <div className="px-3">{electricUnitUse}</div>
+              </td>
+              <td className="text-end">
+                <div className="px-3">8</div>
+              </td>
+              <td className="text-end">
+                <div className="px-3">{totalElectricBill}</div>
+              </td>
             </tr>
             <tr>
               <td>ค่าห้อง</td>
@@ -134,26 +169,49 @@ const RentalBill = () => {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="4">หมายเหตุ</td>
+              <td colSpan="4" rowSpan="2">
+                <div className="flex">
+                  <span className="pe-2">หมายเหตุ:</span>
+                  <input
+                    type="text"
+                    className="input-value-form text-left"
+                    value={remark}
+                    onChange={(e) => setRemark(String(e.target.value))}
+                  />
+                </div>
+              </td>
               <td className="text-end">
                 <h4>รวม</h4>
               </td>
               <td className="text-end">
                 <div className="px-3">{totalPriceOnTable}</div>
-                <div>
-                  ส่วนลด
-                  <input
-                    type="number"
-                    className="input-value-form"
-                    value={discount}
-                    onChange={(e) => setDiscount(Number(e.target.value))}
-                  />
-                </div>
+              </td>
+            </tr>
+            <tr>
+              <td className="text-end">
+                <h4>ส่วนลด</h4>
+              </td>
+              <td className="text-end">
+                <input
+                  type="number"
+                  className="input-value-form"
+                  value={discount}
+                  onChange={(e) => setDiscount(Number(e.target.value))}
+                />
               </td>
             </tr>
           </tfoot>
         </table>
       </div>
+
+      {/** My Signature */}
+      {/* <div className="row justify-end">
+        <img
+          src={`${publicURL}/assets/img/signature.png`}
+          alt="signature"
+          style={{ width: "14rem" }}
+        />
+      </div> */}
 
       {/* Print Button */}
       <div className="text-end">
@@ -168,8 +226,7 @@ const RentalBill = () => {
       </div>
     </div>
   );
-}; 
-
+};
 
 // function App() {
 //   return (
